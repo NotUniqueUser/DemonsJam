@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Scenes/Objects/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scripts/Main.gd" type="Script" id=2]
+[ext_resource path="res://Scenes/Objects/Mob.tscn" type="PackedScene" id=3]
+
+[node name="Main" type="Node"]
+script = ExtResource( 2 )
+mob_scene = ExtResource( 3 )
+
+[node name="Mob" parent="." instance=ExtResource( 3 )]
+position = Vector2( 78, 59 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Player" parent="CanvasLayer" instance=ExtResource( 1 )]
+position = Vector2( 110, 106 )
+
+[connection signal="shot" from="Mob" to="." method="_on_Mob_shot"]
