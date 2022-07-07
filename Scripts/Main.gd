@@ -1,5 +1,12 @@
 extends Node
 
+<<<<<<< HEAD
+=======
+# allows us to duplicate mobs
+export(PackedScene) var mob_scene
+var mute:bool = false
+
+>>>>>>> 1de9735db8146c08af9cf72ba010ab184c26ebdc
 func _init():
 	randomize()
 	
@@ -12,8 +19,10 @@ func new_game():
 	$CanvasLayer/Player.start($PlayerPosition.position)
 	$CanvasLayer/Player.show()
 	$Mob.show()
-	$MainTheme.play()
-
+	$HUD/AudioButton.hide()
+	if !mute:
+		$MainTheme.play()
+	
 func _process(delta):
 	# debug mob behaviour
 	if Input.is_action_just_pressed("test_key"):
@@ -21,3 +30,6 @@ func _process(delta):
 
 func _on_MainTheme_finished(): #Loop
 	$MainTheme.play() 
+
+func _on_HUD_mute(is_muted):
+	mute = is_muted
