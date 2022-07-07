@@ -1,10 +1,12 @@
-extends RigidBody2D
-# -------TODO SWAP NODE TYPES WITH PLAYER VERY IMPORTANT-------
+extends Area2D
+
 signal shot(stage_shot)
 
 export(Color) var blend_color
 export(int) var stage = 3
 export(int, 10, 100) var speed = 20
+
+const SPRITES = [preload("res://Sprites/mo.png"), preload("res://Sprites/mib.png"), preload("res://Sprites/mobi.png")]
 
 onready var sprite
 
@@ -14,15 +16,11 @@ var sprite_x_half
 var sprite_y_half
 var screen_size
 
-func _init(stage = 3, speed = 20):
-	self.stage = stage
-	self.speed = speed
-
 func _ready():
 	hide() #it is shown when the start button is pressed
 	sprite = $Sprite
+	sprite.texture = SPRITES[stage - 1]
 	move_angle = rand_range(0, TAU)
-	sprite.scale = sprite.get_scale() * stage
 	sprite_size = sprite.texture.get_size() * sprite.get_scale()
 	sprite_x_half = sprite_size.x / 2
 	sprite_y_half = sprite_size.y / 2
@@ -34,6 +32,12 @@ func _ready():
 		# color(0,0,0,1) is default color and returns false
 		blend_color if blend_color else Color(rand_range(0, 1), rand_range(0, 1), rand_range(0, 1)) 
 		)
+func update_stage(stage):
+	self.stage = stage
+	sprite.scale = sprite.get_scale() * stage
+	sprite_size = sprite.texture.get_size() * sprite.get_scale()
+	sprite_x_half = sprite_size.x / 2
+	sprite_y_half = sprite_size.y / 2
 
 func _process(delta):
 	var velocity = Vector2.ONE.rotated(move_angle)
@@ -46,7 +50,7 @@ func _process(delta):
 	
 	# bounce the mob (you may modify the bounce but it works good)
 	if is_on_edge():
-		move_angle += PI / 2
+		move_angle += rand_range(0, TAU)
 
 func is_on_edge():
 	if position.x == screen_size.x - sprite_x_half || position.x == sprite_x_half:
@@ -57,14 +61,37 @@ func is_on_edge():
 
 # debug function
 func stimulate():
-	pass
+	_on_Mob_area_entered(null)
 
-func _on_RigidBody2D_body_entered(body: Area2D):
-	print('collided')
-	if body.get_name() == "Player":
-		print('collided with player!')
-		return
+func _on_Mob_area_entered(area: Area2D):
+	# Debug condition, delete later
+	if (area != null && area.get_name() != "Mob") || (area == null):
+		if stage - 1 <= 0:
+			queue_free()
+			return
+		
+		# Duplicate mobs
+		var mob1 = duplicate()
+		var mob2 = duplicate()
+		
+		mob1.sprite = sprite.duplicate()
+		mob2.sprite = sprite.duplicate()
+		
+		mob1.sprite.scale = Vector2(0.25, 0.25)
+		mob2.sprite.scale = Vector2(0.25, 0.25)
+		
+		mob1.move_angle = self.move_angle + PI / 2
+		mob2.move_angle = self.move_angle - PI / 2
+		
+		mob1.update_stage(stage - 1)
+		mob2.update_stage(stage - 1)
+		
+		get_parent().add_child(mob1)
+		get_parent().add_child(mob2)
+		mob1.show()
+		mob2.show()
+		
+		# Remove original mob
+		queue_free()
 	# TODO if body is bullet, in the meantime use the player as a collision body
 	#emit_signal("shot", stage)
-	
-	# TODO split mob - doing it here feels the rightest...
