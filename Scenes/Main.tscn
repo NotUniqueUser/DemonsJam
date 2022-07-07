@@ -28,5 +28,6 @@ position = Vector2( 160, 90 )
 stream = ExtResource( 5 )
 
 [connection signal="shot" from="Mob" to="." method="_on_Mob_shot"]
+[connection signal="mute" from="HUD" to="." method="_on_HUD_mute"]
 [connection signal="start_game" from="HUD" to="." method="new_game"]
 [connection signal="finished" from="MainTheme" to="." method="_on_MainTheme_finished"]

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/laser04.wav-917486a99f37d15126d891a3b45fc08b.sample"
+
+[deps]
+
+source_file="res://Audio/LaserGun/laser04.wav"
+dest_files=[ "res://.import/laser04.wav-917486a99f37d15126d891a3b45fc08b.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
