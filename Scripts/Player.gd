@@ -8,7 +8,6 @@ var screen_size
 export(int, 100, 1000) var speed = 400
 
 func _ready():
-	hide()
 	sprite_size = $Sprite.texture.get_size()
 	sprite_x_half = sprite_size.x / 2
 	sprite_y_half = sprite_size.y / 2
@@ -38,11 +37,9 @@ func _process(delta):
 	position += velocity * delta
 	position.x = clamp(position.x, sprite_x_half, screen_size.x - sprite_x_half)
 	position.y = clamp(position.y, sprite_y_half, screen_size.y - sprite_y_half)
-	
 
 func start(pos):
 	position = pos
-	
 
-func _on_Player_body_entered(body):
+func _on_Player_area_entered(area):
 	print("player collision")
