@@ -1,5 +1,6 @@
 extends Area2D
 
+
 var sprite_size
 var sprite_x_half
 var sprite_y_half
@@ -7,10 +8,12 @@ var screen_size
 export(int, 100, 1000) var speed = 400
 
 func _ready():
+	hide()
 	sprite_size = $Sprite.texture.get_size()
 	sprite_x_half = sprite_size.x / 2
 	sprite_y_half = sprite_size.y / 2
 	screen_size = get_viewport_rect().size
+	
 
 func _process(delta):
 	var velocity = Vector2.ZERO
@@ -37,6 +40,9 @@ func _process(delta):
 	position.y = clamp(position.y, sprite_y_half, screen_size.y - sprite_y_half)
 	
 
+func start(pos):
+	position = pos
+	
 
 func _on_Player_body_entered(body):
 	print("player collision")

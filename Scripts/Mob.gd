@@ -19,6 +19,7 @@ func _init(stage = 3, speed = 20):
 	self.speed = speed
 
 func _ready():
+	hide() #it is shown when the start button is pressed
 	sprite = $Sprite
 	move_angle = rand_range(0, TAU)
 	sprite.scale = sprite.get_scale() * stage
